@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "dotenv -e .env -- next start",
     "lint": "eslint .",
     "generate-icons": "node scripts/generate-icons.mjs"
   },
@@ -71,6 +71,7 @@
     "@types/node": "^22",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "dotenv-cli": "^11.0.0",
     "postcss": "^8.5",
     "prisma": "^6.9.0",
     "prompt-sync": "^4.2.0",

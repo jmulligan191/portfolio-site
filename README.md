@@ -75,6 +75,8 @@ pnpm build
 
 # Start production server
 pnpm start
+
+# Server will run on the port specified in .env (default: 1910)
 ```
 
 ## Environment Variables
