@@ -34,6 +34,33 @@ export function ResumeClient({ resumes }: ResumeClientProps) {
   const currentResume = resumes.find((v) => v.isCurrent) || resumes[0]
   const previousVersions = resumes.filter((v) => !v.isCurrent)
 
+  // Show message if no resumes are available
+  if (!currentResume) {
+    return (
+      <div className="mx-auto max-w-4xl px-6 py-16">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl mb-8">
+          Resume
+        </h1>
+        <Card className="border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950">
+          <CardHeader>
+            <CardTitle className="text-amber-900 dark:text-amber-100">
+              Resume Not Yet Available
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-amber-800 dark:text-amber-200">
+            <p>
+              No resume has been uploaded yet. Please check back soon, or visit the{" "}
+              <a href="/contact" className="underline hover:no-underline">
+                contact page
+              </a>{" "}
+              to reach out.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
       {/* Header */}
