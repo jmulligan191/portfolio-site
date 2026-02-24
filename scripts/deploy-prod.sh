@@ -33,7 +33,7 @@ print_error() {
   echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Check if PM2 is installed
+# check if PM2 is installed
 check_pm2() {
   if ! command -v pm2 &> /dev/null; then
     print_warning "PM2 is not installed. Installing globally..."
