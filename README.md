@@ -47,10 +47,15 @@ The site is deployed at the following URL: [https://jmulligan191.com](https://jm
 
 6. **Seed the admin user**
    ```bash
-   # Creates admin user with email from NEXT_PUBLIC_DOMAIN
-   # Default password: admin123 (should be changed in production!)
+   # Interactive script - prompts for admin name and password
    node scripts/seed-admin.mjs
    ```
+   This will prompt you for:
+   - Admin name (any display name)
+   - Admin password (minimum 6 characters, hidden input)
+   - Password confirmation
+   
+   The admin email will be `admin@<your-domain>` from `NEXT_PUBLIC_DOMAIN`
 
 ### Development
 
@@ -145,9 +150,9 @@ export const workExperience: WorkExperience[] = [
 
 ## Admin Panel
 
-Access at `/admin` using:
+Access at `/admin` using the credentials you set up during the seeding process:
 - **Email**: `admin@<your-domain>` (from `NEXT_PUBLIC_DOMAIN`)
-- **Password**: `admin123` (change immediately in production!)
+- **Password**: The password you entered when running `node scripts/seed-admin.mjs`
 
 The admin panel allows you to:
 - Upload and manage resume PDF versions
@@ -155,7 +160,7 @@ The admin panel allows you to:
 - Download your resumes with user-friendly filenames
 - View all portfolio content from the database
 
-**⚠️ Security**: Change the admin password in production. The seeded credentials are for development only.
+**⚠️ Security**: Use a strong password for production deployments.
 
 ## Icons
 
@@ -255,8 +260,14 @@ Resumes are auto-versioned and downloadable from the Resume page.
 ### Admin login not working
 
 1. Check that `NEXT_PUBLIC_DOMAIN` matches your domain in `.env`
-2. Reset admin user: Delete data, run `node scripts/seed-admin.mjs` again
-3. Check `dev.db` file exists in project root
+2. Verify you're using the correct email (`admin@<your-domain>`) and password from the seeding script
+3. To reset admin user:
+   ```bash
+   rm dev.db
+   pnpm exec prisma migrate dev --name init
+   node scripts/seed-admin.mjs
+   ```
+4. Check `dev.db` file exists in project root
 
 ### Sentry not capturing errors
 
