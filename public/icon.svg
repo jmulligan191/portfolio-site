@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <defs>
+    <style>
+      .j-bg-light { fill: #000000; }
+      .j-text-light { fill: #ffffff; }
+      @media (prefers-color-scheme: dark) {
+        .j-bg-light { fill: #ffffff; }
+        .j-text-light { fill: #000000; }
+      }
+    </style>
+  </defs>
+  <rect class="j-bg-light" width="180" height="180" rx="40" />
+  <text class="j-text-light" x="90" y="135" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, system-ui, sans-serif" font-size="140" font-weight="700" text-anchor="middle">J</text>
+</svg>

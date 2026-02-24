@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60">
+  <defs>
+    <style>
+      .j-logo-bg { fill: none; }
+      .j-logo-text { fill: #1a1a2e; }
+      @media (prefers-color-scheme: dark) {
+        .j-logo-text { fill: #f5f5ff; }
+      }
+    </style>
+  </defs>
+  <!-- Logo Square with Letter J -->
+  <rect class="j-logo-bg" x="0" y="0" width="60" height="60" rx="12" />
+  <text class="j-logo-text" x="30" y="50" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, system-ui, sans-serif" font-size="48" font-weight="700" text-anchor="middle">J</text>
+  <!-- Optional text next to logo -->
+  <text class="j-logo-text" x="70" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, system-ui, sans-serif" font-size="32" font-weight="700">John</text>
+</svg>
