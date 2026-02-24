@@ -53,9 +53,10 @@ module.exports = {
   apps: [
     {
       name: 'portfolio-website',
-      script: '.next/standalone/server.js',
+      script: 'pnpm',
+      args: 'start',
       instances: 1,
-      exec_mode: 'cluster',
+      exec_mode: 'fork',
       env: {
         PORT: process.env.PORT || 1910,
         NODE_ENV: 'production',
@@ -93,8 +94,8 @@ start_app() {
   cd "$PROJECT_DIR"
   
   # Check if built
-  if [ ! -d ".next/standalone" ]; then
-    print_warning ".next/standalone not found. Building now..."
+  if [ ! -d ".next" ]; then
+    print_warning ".next directory not found. Building now..."
     print_info "Running: pnpm build"
     pnpm build
   fi
@@ -108,6 +109,7 @@ start_app() {
   
   print_success "Application started with PM2"
   print_info "App name: $APP_NAME"
+  print_info "Port: $(grep PORT "$PROJECT_DIR/.env" | cut -d= -f2 | tr -d '"' || echo '1910')"
   print_info "Check status: pm2 status"
   print_info "View logs: pm2 logs portfolio-website"
 }
@@ -123,6 +125,10 @@ stop_app() {
 restart_app() {
   print_info "Restarting application..."
   cd "$PROJECT_DIR"
+  
+  # Rebuild
+  print_info "Building application..."
+  pnpm build
   
   if pm2 list | grep -q "portfolio-website"; then
     pm2 restart "$APP_NAME" --update-env
@@ -185,7 +191,7 @@ Usage: bash scripts/pm2.sh [command]
 Commands:
   start         Build (if needed) and start the application with PM2
   stop          Stop the running application
-  restart       Restart the application (rebuilds if needed)
+  restart       Restart the application (rebuilds)
   delete        Remove the application from PM2
   status        Show application status
   logs          Show application logs
@@ -194,7 +200,7 @@ Commands:
 
 Examples:
   bash scripts/pm2.sh start      # Start the app
-  bash scripts/pm2.sh restart    # Restart the app
+  bash scripts/pm2.sh restart    # Restart and rebuild the app
   bash scripts/pm2.sh logs       # View live logs
   bash scripts/pm2.sh status     # Check current status
 
@@ -205,8 +211,9 @@ Environment:
 Notes:
   - This script requires PM2 (installed automatically if missing)
   - .env file must be present in project root
-  - Application will be built if .next/standalone doesn't exist
+  - Application will be built if .next doesn't exist
   - Logs are saved to logs/ directory
+  - Uses pnpm to run 'next start' which respects .env variables
 EOF
 }
 
