@@ -257,6 +257,71 @@ export const skills: Skill[] = [
 
 Resumes are auto-versioned and downloadable from the Resume page.
 
+## Deployment
+
+### Using PM2 (Linux)
+
+PM2 is a production process manager for Node.js. Use the included script to easily manage your application:
+
+```bash
+# Start the app (builds if needed)
+bash scripts/pm2.sh start
+
+# Restart the app
+bash scripts/pm2.sh restart
+
+# Stop the application
+bash scripts/pm2.sh stop
+
+# View application status
+bash scripts/pm2.sh status
+
+# View live logs
+bash scripts/pm2.sh logs
+
+# Remove from PM2
+bash scripts/pm2.sh delete
+
+# Setup to start on system boot
+bash scripts/pm2.sh startup
+```
+
+The PM2 script will:
+- Automatically install PM2 if not present
+- Build the application if needed
+- Create proper logging to `logs/` directory
+- Handle graceful restarts
+- Respect your `.env` file (PORT, NODE_ENV, etc.)
+
+**First time setup:**
+```bash
+# 1. Build the project
+pnpm build
+
+# 2. Start with PM2
+bash scripts/pm2.sh start
+
+# 3. (Optional) Setup auto-start on boot
+bash scripts/pm2.sh startup
+# Then run the command that appears
+pm2 save
+```
+
+### Vercel (Recommended)
+
+1. Push code to GitHub
+2. Connect repository to Vercel
+3. Set environment variables in Vercel dashboard
+4. Deploy automatically on push
+
+### Other Platforms (Railway, Heroku, etc.)
+
+1. Ensure `NODE_ENV=production`
+2. Set all required environment variables
+3. Build: `pnpm build`
+4. Start: `pnpm start` (respects PORT from .env)
+5. For databases: Use managed PostgreSQL/MySQL (update `DATABASE_URL`)
+
 ## Troubleshooting
 
 ### Admin login not working
