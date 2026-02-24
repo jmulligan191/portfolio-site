@@ -7,6 +7,18 @@ import bcrypt from "bcryptjs"
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   trustHost: process.env.NEXTAUTH_TRUST_HOST === "true",
+  logger: {
+    error(error) {
+      if (
+        error.name === "CredentialsSignin" ||
+        (error as { type?: string; code?: string }).type === "CredentialsSignin" ||
+        (error as { type?: string; code?: string }).code === "credentials"
+      ) {
+        return
+      }
+      console.error(error)
+    },
+  },
   session: {
     strategy: "jwt",
   },
@@ -22,7 +34,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Please enter your email and password")
+          return null
         }
 
         const user = await prisma.user.findUnique({
@@ -32,7 +44,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         })
 
         if (!user || !user.password) {
-          throw new Error("Invalid email or password")
+          return null
         }
 
         const isCorrectPassword = await bcrypt.compare(
@@ -41,7 +53,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         )
 
         if (!isCorrectPassword) {
-          throw new Error("Invalid email or password")
+          return null
         }
 
         return {

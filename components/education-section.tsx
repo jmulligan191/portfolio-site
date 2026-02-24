@@ -6,13 +6,10 @@ import { education } from "@/lib/data"
 const formatCourseLabel = (course: {
   name: string
   code?: string
-  termNumber?: string
   termLabel?: string
 }) => {
   const base = course.code ? `${course.code} - ${course.name}` : course.name
-  const term = course.termNumber
-    ? `Term ${course.termNumber}`
-    : course.termLabel
+  const term = course.termLabel
 
   return term ? `${base} (${term})` : base
 }
@@ -74,7 +71,7 @@ export function EducationSection() {
                   {edu.relevantCourses.map((course) => (
                     <Badge
                       key={`${course.code ?? "course"}-${course.name}-${
-                        course.termNumber ?? course.termLabel ?? "term"
+                        course.termLabel ?? "term"
                       }`}
                       variant="outline"
                       className="text-xs font-normal"
