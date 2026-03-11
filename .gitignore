@@ -5,6 +5,7 @@ __v0_jsx-dev-runtime.ts
 
 # Sensitive/Personal data
 lib/data.ts
+lib/data_old.ts
 
 # Common ignores
 node_modules/
