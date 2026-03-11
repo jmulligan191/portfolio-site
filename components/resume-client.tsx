@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { personalInfo, skills } from "@/lib/data"
+import { education, personalInfo, skills } from "@/lib/data"
 import { format } from "date-fns"
 
 interface Resume {
@@ -33,6 +33,10 @@ export function ResumeClient({ resumes }: ResumeClientProps) {
   const [showPreviousVersions, setShowPreviousVersions] = useState(false)
   const currentResume = resumes.find((v) => v.isCurrent) || resumes[0]
   const previousVersions = resumes.filter((v) => !v.isCurrent)
+  // remove high school education from the resume summary
+  const resumeEducation = education.filter(
+    (edu) => !edu.degree.toLowerCase().includes("high school")
+  )
 
   // Show message if no resumes are available
   if (!currentResume) {
@@ -104,13 +108,21 @@ export function ResumeClient({ resumes }: ResumeClientProps) {
               <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">
                 Education
               </h3>
-              <div className="mt-3 flex flex-col gap-1">
-                <p className="font-medium text-foreground">
-                  B.S. Software Engineering
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {personalInfo.school} - {personalInfo.year} (Expected 2029)
-                </p>
+              <div className="mt-3 flex flex-col gap-3">
+                {resumeEducation.map((edu) => (
+                  <div
+                    key={`${edu.institution}-${edu.degree}-${edu.graduationDate}`}
+                    className="flex flex-col gap-1"
+                  >
+                    <p className="font-medium text-foreground">
+                      {edu.degree}
+                      {edu.major ? `, ${edu.major}` : ""}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {edu.institution} - {edu.graduationDate}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
 
