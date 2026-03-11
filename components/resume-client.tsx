@@ -71,7 +71,9 @@ export function ResumeClient({ resumes }: ResumeClientProps) {
           </h1>
         </div>
         <Button asChild size="lg">
-          <a href={currentResume.filename} download="Resume - John Mulligan.pdf">
+          <a
+            href={`/api/download?file=${encodeURIComponent(currentResume.filename)}&label=${encodeURIComponent("Resume - John Mulligan")}`}
+          >
             <Download className="size-4" />
             Download Resume (PDF)
           </a>
@@ -195,8 +197,7 @@ export function ResumeClient({ resumes }: ResumeClientProps) {
                         </div>
                         <Button asChild variant="outline" size="sm">
                           <a
-                            href={version.filename}
-                            download={`Resume - John Mulligan - ${format(new Date(version.date), "MMMM yyyy")}.pdf`}
+                            href={`/api/download?file=${encodeURIComponent(version.filename)}&label=${encodeURIComponent(`Resume - John Mulligan - ${format(new Date(version.date), "MMMM yyyy")}`)}`}
                             aria-label={`Download resume from ${format(new Date(version.date), "MMMM yyyy")}`}
                           >
                             <Download className="size-4" />

@@ -45,12 +45,23 @@ export function NavHeader() {
         {/* Mobile nav toggle */}
         <div className="flex items-center gap-2 md:hidden">
           <Button
-            variant="ghost"
-            size="icon-sm"
+            variant="outline"
+            size="sm"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle navigation"
+            className="gap-2 border-border/80 bg-background shadow-sm"
           >
-            {mobileOpen ? <X className="size-4" /> : <Menu className="size-4" />}
+            {mobileOpen ? (
+              <>
+                <X className="size-4" />
+                <span className="text-sm font-medium">Close</span>
+              </>
+            ) : (
+              <>
+                <Menu className="size-4" />
+                <span className="text-sm font-medium">Menu</span>
+              </>
+            )}
           </Button>
         </div>
       </nav>

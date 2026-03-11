@@ -36,7 +36,7 @@ export function EducationSection() {
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div className="flex gap-3">
-                  <div className="mt-1 rounded-lg bg-primary/10 p-2">
+                  <div className="mt-1 self-start rounded-lg bg-primary/10 p-2">
                     <GraduationCap className="size-5 text-primary" />
                   </div>
                   <div>
@@ -48,7 +48,7 @@ export function EducationSection() {
                       {edu.institution} • {edu.location}
                     </p>
                     <p className="mt-0.5 text-sm text-muted-foreground">
-                      {edu.graduationDate}
+                      {edu.startDate ? `${edu.startDate} – ${edu.graduationDate}` : edu.graduationDate}
                     </p>
                     {/* {edu.termSystem && (
                       <p className="mt-0.5 text-sm text-muted-foreground">

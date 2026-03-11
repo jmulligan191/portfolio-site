@@ -22,7 +22,7 @@ export function WorkExperienceSection() {
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div className="flex gap-3">
-                  <div className="mt-1 rounded-lg bg-primary/10 p-2">
+                  <div className="mt-1 self-start rounded-lg bg-primary/10 p-2">
                     <Briefcase className="size-5 text-primary" />
                   </div>
                   <div>

@@ -12,7 +12,7 @@ export function HeroSection() {
       </Badge>
       <div className="flex max-w-2xl flex-col gap-4">
         <h1 className="text-balance text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl">
-          Hey, I{"'"}m{" "}
+          Hi, I{"'"}m{" "}
           <span className="text-primary">{personalInfo.firstName}</span>
           <span className="text-primary">.</span>
         </h1>
