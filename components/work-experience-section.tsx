@@ -11,9 +11,6 @@ export function WorkExperienceSection() {
           <h2 className="text-2xl font-bold tracking-tight text-foreground">
             Work Experience
           </h2>
-          <p className="mt-2 text-muted-foreground">
-            Professional experience and positions held.
-          </p>
         </div>
       </div>
       <div className="mt-8 space-y-4">
