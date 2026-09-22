@@ -80,7 +80,10 @@ export async function syncResumeFromSource(): Promise<SyncResult> {
  * Resolves the filename (relative to public/resumes/) currently served as
  * the default resume. Prefers whatever the last successful GitHub sync
  * downloaded; falls back to content/config.ts's `isCurrent` entry if no
- * sync has ever run (or the synced file is missing on disk).
+ * sync has ever run (or the synced file is missing on disk); if neither
+ * exists on disk (e.g. a fresh deploy that never got the gitignored
+ * public/resumes/ uploads), pulls the current PDF from the source repo
+ * on demand as a last resort.
  */
 export async function resolveCurrentResumeFilename(fallback: string | null): Promise<string | null> {
   const state = await readSyncState()
@@ -88,5 +91,14 @@ export async function resolveCurrentResumeFilename(fallback: string | null): Pro
     const path = join(RESUMES_DIR, state.currentFilename)
     if (existsSync(path)) return state.currentFilename
   }
+
+  if (fallback) {
+    const fallbackPath = join(RESUMES_DIR, fallback)
+    if (existsSync(fallbackPath)) return fallback
+  }
+
+  const synced = await syncResumeFromSource()
+  if (synced.updated && synced.filename) return synced.filename
+
   return fallback
 }
