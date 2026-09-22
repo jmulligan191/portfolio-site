@@ -12,7 +12,8 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { education, personalInfo, skills } from "@/lib/data"
+import { personalInfo, visibleSections } from "@/content/data"
+import type { SectionConfig } from "@/content/types"
 import { format } from "date-fns"
 
 interface Resume {
@@ -33,10 +34,8 @@ export function ResumeClient({ resumes }: ResumeClientProps) {
   const [showPreviousVersions, setShowPreviousVersions] = useState(false)
   const currentResume = resumes.find((v) => v.isCurrent) || resumes[0]
   const previousVersions = resumes.filter((v) => !v.isCurrent)
-  // remove high school education from the resume summary
-  const resumeEducation = education.filter(
-    (edu) => !edu.degree.toLowerCase().includes("high school")
-  )
+  // sections shown on the resume summary, in configured order
+  const resumeSections = visibleSections.filter((section) => section.resume)
 
   // Show message if no resumes are available
   if (!currentResume) {
@@ -75,9 +74,7 @@ export function ResumeClient({ resumes }: ResumeClientProps) {
           </h1>
         </div>
         <Button asChild size="lg">
-          <a
-            href={`/api/download?file=${encodeURIComponent(currentResume.filename)}&label=${encodeURIComponent("Resume - John Mulligan")}`}
-          >
+          <a href="/resume/download">
             <Download className="size-4" />
             Download Resume (PDF)
           </a>
@@ -103,59 +100,12 @@ export function ResumeClient({ resumes }: ResumeClientProps) {
             </div>
           </CardHeader>
           <CardContent className="flex flex-col gap-6">
-            {/* Education */}
-            <div>
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">
-                Education
-              </h3>
-              <div className="mt-3 flex flex-col gap-3">
-                {resumeEducation.map((edu) => (
-                  <div
-                    key={`${edu.institution}-${edu.degree}-${edu.graduationDate}`}
-                    className="flex flex-col gap-1"
-                  >
-                    <p className="font-medium text-foreground">
-                      {edu.degree}
-                      {edu.major ? `, ${edu.major}` : ""}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {edu.institution} - {edu.graduationDate}
-                    </p>
-                  </div>
-                ))}
+            {resumeSections.map((section) => (
+              <div key={section.title} className="flex flex-col gap-6">
+                <ResumeSection section={section} />
+                <Separator />
               </div>
-            </div>
-
-            <Separator />
-
-            {/* Skills from config */}
-            <div>
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">
-                Technical Skills
-              </h3>
-              <div className="mt-3 flex flex-col gap-4">
-                {skills.map((group) => (
-                  <div key={group.category} className="flex flex-col gap-2">
-                    <p className="text-sm font-medium text-foreground">
-                      {group.category}
-                    </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {group.items.map((item) => (
-                        <Badge
-                          key={item}
-                          variant="outline"
-                          className="text-xs font-normal"
-                        >
-                          {item}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <Separator />
+            ))}
 
             <p className="text-sm leading-relaxed text-muted-foreground">
               For the full details including work experience and project descriptions,
@@ -227,4 +177,113 @@ export function ResumeClient({ resumes }: ResumeClientProps) {
       </div>
     </div>
   )
+}
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h3 className="text-sm font-semibold uppercase tracking-wider text-primary">
+      {children}
+    </h3>
+  )
+}
+
+/** Compact version of a section for the resume summary. */
+function ResumeSection({ section }: { section: SectionConfig }) {
+  const heading = <SectionHeading>{section.resumeTitle ?? section.title}</SectionHeading>
+
+  switch (section.type) {
+    case "education": {
+      // high school is left off the resume summary
+      const entries = section.data.filter(
+        (edu) => !edu.degree.toLowerCase().includes("high school")
+      )
+      return (
+        <div>
+          {heading}
+          <div className="mt-3 flex flex-col gap-3">
+            {entries.map((edu) => (
+              <div
+                key={`${edu.institution}-${edu.degree}-${edu.graduationDate}`}
+                className="flex flex-col gap-1"
+              >
+                <p className="font-medium text-foreground">
+                  {edu.degree}
+                  {edu.major ? `, ${edu.major}` : ""}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {edu.institution} - {edu.graduationDate}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+    case "skills":
+      return (
+        <div>
+          {heading}
+          <div className="mt-3 flex flex-col gap-4">
+            {section.data.map((group) => (
+              <div key={group.category} className="flex flex-col gap-2">
+                <p className="text-sm font-medium text-foreground">{group.category}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {group.items.map((item) => (
+                    <Badge key={item} variant="outline" className="text-xs font-normal">
+                      {item}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    case "projects":
+      return (
+        <div>
+          {heading}
+          <ul className="mt-3 flex flex-col gap-1 text-sm">
+            {section.data.map((project) => (
+              <li key={project.title} className="text-foreground">
+                {project.title}
+                <span className="text-muted-foreground"> - {project.tags.join(", ")}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    case "experience":
+      return (
+        <div>
+          {heading}
+          <div className="mt-3 flex flex-col gap-3">
+            {section.data.map((work, index) => (
+              <div key={index} className="flex flex-col gap-1">
+                <p className="font-medium text-foreground">{work.title}</p>
+                <p className="text-sm text-muted-foreground">
+                  {work.company} - {work.startDate} to {work.endDate}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    case "entries":
+      return (
+        <div>
+          {heading}
+          <div className="mt-3 flex flex-col gap-3">
+            {section.data.map((entry, index) => (
+              <div key={index} className="flex flex-col gap-1">
+                <p className="font-medium text-foreground">{entry.title}</p>
+                <p className="text-sm text-muted-foreground">
+                  {[entry.subtitle, entry.date ?? entry.startDate].filter(Boolean).join(" - ")}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+  }
 }

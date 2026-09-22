@@ -1,4 +1,4 @@
-import { personalInfo } from "@/lib/data"
+import { githubAccounts, personalInfo } from "@/content/data"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -19,14 +19,17 @@ export function Footer() {
         </p>
         <div className="flex flex-col items-center gap-3 md:items-end">
           <div className="flex items-center gap-4">
-            <a
-              href={personalInfo.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-colors hover:text-foreground"
-            >
-              GitHub
-            </a>
+            {githubAccounts.map((g) => (
+              <a
+                key={g.url}
+                href={g.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-foreground"
+              >
+                {g.label}
+              </a>
+            ))}
             <a
               href={personalInfo.linkedin}
               target="_blank"

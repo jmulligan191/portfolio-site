@@ -1,6 +1,6 @@
 # Portfolio Website
 
-i built my very own cool portfolio website using next.js, prisma, and tailwindcss. it features a custom admin panel for managing my projects, skills, education, work experience, and resume.
+i built my very own cool portfolio website using next.js and tailwindcss. all content (profile, projects, skills, education, work experience, and resume history) is hardcoded in the `content/` folder, so no database is needed.
 
 The site is deployed at the following URL: [https://jmulligan191.com](https://jmulligan191.com)
 
@@ -9,7 +9,6 @@ The site is deployed at the following URL: [https://jmulligan191.com](https://jm
 ### Prerequisites
 
 - Node.js 18+ and pnpm (`npm install -g pnpm`)
-- SQLite (included with Prisma)
 
 ### Installation
 
@@ -32,30 +31,11 @@ The site is deployed at the following URL: [https://jmulligan191.com](https://jm
 
 4. **Configure your portfolio data**
    ```bash
-   # Copy the example data file
-   cp lib/data.example.ts lib/data.ts
-   
-   # Edit with your information
-   nano lib/data.ts
+   cp content/config.example.ts content/config.ts
    ```
 
-5. **Set up the database**
-   ```bash
-   # Run Prisma migrations
-   pnpm exec prisma migrate dev --name init
-   ```
+   `content/config.ts` (gitignored) is the only file you need to edit. It holds your profile (name, school, class year, graduation, Co-Op terms, contact/GitHub, bio), projects, skills, education, work experience, and resume history (put the PDF in `public/resumes/`, add an entry, mark it `isCurrent: true`). `data.ts` only generates and formats values.
 
-6. **Seed the admin user**
-   ```bash
-   # Interactive script - prompts for admin name and password
-   node scripts/seed-admin.mjs
-   ```
-   This will prompt you for:
-   - Admin name (any display name)
-   - Admin password (minimum 6 characters, hidden input)
-   - Password confirmation
-   
-   The admin email will be `admin@<your-domain>` from `NEXT_PUBLIC_DOMAIN`
 
 ### Development
 
@@ -64,7 +44,6 @@ The site is deployed at the following URL: [https://jmulligan191.com](https://jm
 pnpm dev
 
 # Open http://localhost:1910
-# Admin panel at: http://localhost:1910/admin
 ```
 
 ### Production Build
@@ -87,17 +66,28 @@ Copy `.env.example` to `.env` and configure:
 |----------|---------|-------------|
 | `NODE_ENV` | `development` | Environment mode |
 | `PORT` | `1910` | Port to run the server on |
-| `NEXT_PUBLIC_DOMAIN` | `johnmulligan.dev` | Your domain name (used for admin email, Sentry) |
-| `DATABASE_URL` | `file:./dev.db` | SQLite database path |
+| `NEXT_PUBLIC_DOMAIN` | `johnmulligan.dev` | Your domain name (used for Sentry) |
 | `AUTH_SECRET` | (required) | NextAuth secret for JWT signing |
 | `NEXT_PUBLIC_ENABLE_CF_ANALYTICS` | `false` | Enable Cloudflare Analytics |
 | `NEXT_PUBLIC_CF_BEACON_URL` | Cloudflare URL | Analytics beacon script URL |
 | `NEXT_PUBLIC_CF_ANALYTICS_TOKEN` | (optional) | Cloudflare token |
 | `NEXT_PUBLIC_SENTRY_DSN` | (optional) | Sentry DSN for error tracking |
 
-## Portfolio Content (lib/data.ts)
+### Customizing sections
 
-The `lib/data.ts` file contains all your portfolio content:
+The `sections` list in `content/config.ts` controls the layout of the home page:
+
+- **Order:** move entries up or down.
+- **Titles:** edit `title` and `description`.
+- **Hide/show:** set `enabled: false`. Sections with no data are hidden automatically.
+- **Resume page:** set `resume: true` to show a compact version on `/resume` (`resumeTitle` overrides the heading).
+- **Optional sections:** `relevantExperience`, `certifications`, `awards`, `publications`, `volunteering`, `leadership` and `languages` are ready to fill in.
+- **Your own section:** add `{ type: "entries", title: "Anything", data: myArray }`. Types are `skills`, `projects`, `education`, `experience` and `entries`.
+- **Custom fields:** any entry accepts `customFields: [{ label: "GPA", value: "3.9", href?: "..." }]`.
+
+## Portfolio Content (content/)
+
+The typed data lives in `content/config.ts`:
 
 ```typescript
 export const personalInfo = {
@@ -150,20 +140,6 @@ export const workExperience: WorkExperience[] = [
 ]
 ```
 
-## Admin Panel
-
-Access at `/admin` using the credentials you set up during the seeding process:
-- **Email**: `admin@<your-domain>` (from `NEXT_PUBLIC_DOMAIN`)
-- **Password**: The password you entered when running `node scripts/seed-admin.mjs`
-
-The admin panel allows you to:
-- Upload and manage resume PDF versions
-- Auto-version based on upload date
-- Download your resumes with user-friendly filenames
-- View all portfolio content from the database
-
-**⚠️ Security**: Use a strong password for production deployments.
-
 ## Icons
 
 To regenerate PNG icons from SVG:
@@ -211,14 +187,14 @@ Test errors at `/test` page in development.
 
 ### Update Portfolio Content
 
-1. Edit `lib/data.ts`
+1. Edit `content/config.ts`
 2. Restart dev server (`pnpm dev`)
 3. Changes appear immediately
 
 ### Add a New Project
 
 ```typescript
-// In lib/data.ts
+// In content/config.ts
 export const projects: Project[] = [
   // ... existing projects
   {
@@ -236,7 +212,7 @@ export const projects: Project[] = [
 ### Add a New Skill
 
 ```typescript
-// In lib/data.ts
+// In content/config.ts
 export const skills: Skill[] = [
   // ... existing skills
   {
@@ -246,16 +222,12 @@ export const skills: Skill[] = [
 ]
 ```
 
-### Upload a New Resume (via Admin)
+### Publish a New Resume
 
-1. Go to `/admin`
-2. Click "Upload Resume"
-3. Select PDF file
-4. Add changelog notes
-5. Mark as current if needed
-6. Upload
-
-Resumes are auto-versioned and downloadable from the Resume page.
+1. Copy the PDF into `public/resumes/`
+2. Add an entry at the top of `content/config.ts`
+3. Set `isCurrent: true` on it and `false` on the old one
+4. Rebuild and redeploy
 
 ## Deployment
 
@@ -320,21 +292,8 @@ pm2 save
 2. Set all required environment variables
 3. Build: `pnpm build`
 4. Start: `pnpm start` (respects PORT from .env)
-5. For databases: Use managed PostgreSQL/MySQL (update `DATABASE_URL`)
 
 ## Troubleshooting
-
-### Admin login not working
-
-1. Check that `NEXT_PUBLIC_DOMAIN` matches your domain in `.env`
-2. Verify you're using the correct email (`admin@<your-domain>`) and password from the seeding script
-3. To reset admin user:
-   ```bash
-   rm dev.db
-   pnpm exec prisma migrate dev --name init
-   node scripts/seed-admin.mjs
-   ```
-4. Check `dev.db` file exists in project root
 
 ### Sentry not capturing errors
 

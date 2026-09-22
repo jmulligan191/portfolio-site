@@ -1,15 +1,15 @@
 import { Badge } from "@/components/ui/badge"
-import { skills } from "@/lib/data"
+import type { Skill } from "@/content/types"
+import { CustomFields } from "@/components/custom-fields"
+import type { SectionProps } from "@/components/section-props"
 
-export function SkillsSection() {
+export function SkillsSection({ title, description, data: skills }: SectionProps<Skill>) {
   return (
     <section className="mx-auto max-w-5xl px-6 py-16">
       <h2 className="text-2xl font-bold tracking-tight text-foreground">
-        Skills & Technologies
+        {title}
       </h2>
-      <p className="mt-2 text-muted-foreground">
-        Tools and technologies I work with.
-      </p>
+      {description && <p className="mt-2 text-muted-foreground">{description}</p>}
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {skills.map((group) => (
           <div key={group.category} className="flex flex-col gap-3">
@@ -23,6 +23,7 @@ export function SkillsSection() {
                 </Badge>
               ))}
             </div>
+            <CustomFields fields={group.customFields} />
           </div>
         ))}
       </div>

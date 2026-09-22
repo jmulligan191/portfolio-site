@@ -1,7 +1,9 @@
 import { GraduationCap } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { education } from "@/lib/data"
+import type { Education } from "@/content/types"
+import { CustomFields } from "@/components/custom-fields"
+import type { SectionProps } from "@/components/section-props"
 
 const formatCourseLabel = (course: {
   name: string
@@ -20,14 +22,17 @@ const formatTermSystem = (termSystem?: "Semester" | "Quarter") => {
   return `${termSystem}${termSystem.endsWith("s") ? "" : "s"}`
 }
 
-export function EducationSection() {
+export function EducationSection({ title, description, data: education }: SectionProps<Education>) {
   return (
     <section className="mx-auto max-w-5xl px-6 py-16">
       <div className="flex items-end justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-foreground">
-            Education
+            {title}
           </h2>
+          {description && (
+            <p className="mt-2 text-muted-foreground">{description}</p>
+          )}
         </div>
       </div>
       <div className="mt-8 space-y-4">
@@ -60,6 +65,7 @@ export function EducationSection() {
                         {edu.details}
                       </p>
                     )}
+                    <CustomFields fields={edu.customFields} />
                   </div>
                 </div>
               </div>

@@ -8,19 +8,21 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { projects } from "@/lib/data"
+import type { Project } from "@/content/types"
+import { CustomFields } from "@/components/custom-fields"
+import type { SectionProps } from "@/components/section-props"
 
-export function ProjectsSection() {
+export function ProjectsSection({ title, description, data: projects }: SectionProps<Project>) {
   return (
     <section className="mx-auto max-w-5xl px-6 py-16">
       <div className="flex items-end justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-foreground">
-            Projects
+            {title}
           </h2>
-          <p className="mt-2 text-muted-foreground">
-            A selection of things I{"'"}ve built and contributed to.
-          </p>
+          {description && (
+            <p className="mt-2 text-muted-foreground">{description}</p>
+          )}
         </div>
       </div>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -94,6 +96,7 @@ export function ProjectsSection() {
                   </Badge>
                 ))}
               </div>
+              <CustomFields fields={project.customFields} />
             </CardContent>
           </Card>
         ))}

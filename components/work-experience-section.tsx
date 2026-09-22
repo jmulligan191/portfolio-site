@@ -1,16 +1,21 @@
 import { Briefcase } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { workExperience } from "@/lib/data"
+import type { WorkExperience } from "@/content/types"
+import { CustomFields } from "@/components/custom-fields"
+import type { SectionProps } from "@/components/section-props"
 
-export function WorkExperienceSection() {
+export function WorkExperienceSection({ title, description, data: workExperience }: SectionProps<WorkExperience>) {
   return (
     <section className="mx-auto max-w-5xl px-6 py-16">
       <div className="flex items-end justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-foreground">
-            Work Experience
+            {title}
           </h2>
+          {description && (
+            <p className="mt-2 text-muted-foreground">{description}</p>
+          )}
         </div>
       </div>
       <div className="mt-8 space-y-4">
@@ -38,6 +43,7 @@ export function WorkExperienceSection() {
                     <p className="mt-0.5 text-sm text-muted-foreground">
                       {work.startDate} - {work.endDate}
                     </p>
+                    <CustomFields fields={work.customFields} />
                   </div>
                 </div>
               </div>

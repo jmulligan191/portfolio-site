@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { contactMethods, personalInfo } from "@/lib/data"
+import { contactMethods, personalInfo } from "@/content/data"
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -120,7 +120,7 @@ export default function ContactPage() {
               <ul className="mt-2 flex flex-col gap-1.5 text-sm text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <span className="size-1.5 rounded-full bg-primary" />
-                  Co-Op opportunities for Summer and/or Fall 2026
+                  Co-Op opportunities for {personalInfo.coopTermsText}
                 </li>
               </ul>
             </CardContent>

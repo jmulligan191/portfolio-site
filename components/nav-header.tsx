@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { Menu, X } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { personalInfo, navLinks } from "@/lib/data"
+import { personalInfo, navLinks } from "@/content/data"
 import { cn } from "@/lib/utils"
 
 export function NavHeader() {

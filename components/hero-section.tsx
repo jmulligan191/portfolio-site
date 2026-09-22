@@ -2,7 +2,7 @@ import Link from "next/link"
 import { ArrowRight, FileText, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { personalInfo } from "@/lib/data"
+import { githubAccounts, personalInfo } from "@/content/data"
 
 export function HeroSection() {
   return (
@@ -27,16 +27,14 @@ export function HeroSection() {
             View Resume
           </Link>
         </Button>
-        <Button asChild variant="outline" size="lg">
-          <a
-            href={personalInfo.github}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Github className="size-4" />
-            GitHub
-          </a>
-        </Button>
+        {githubAccounts.map((g) => (
+          <Button key={g.url} asChild variant="outline" size="lg">
+            <a href={g.url} target="_blank" rel="noopener noreferrer">
+              <Github className="size-4" />
+              {g.shortLabel}
+            </a>
+          </Button>
+        ))}
         <Button asChild variant="ghost" size="lg">
           <Link href="/contact">
             Contact Me

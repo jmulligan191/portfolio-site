@@ -2,10 +2,10 @@ import type { Metadata, Viewport } from "next"
 import { Inter, JetBrains_Mono } from "next/font/google"
 import Script from "next/script"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Providers } from "@/components/providers"
 import { SentryProvider } from "@/components/sentry-provider"
 import { NavHeader } from "@/components/nav-header"
 import { Footer } from "@/components/footer"
+import { ClientSignalsBeacon } from "@/components/client-signals-beacon"
 import "./globals.css"
 
 const inter = Inter({
@@ -73,8 +73,8 @@ export default function RootLayout({
             strategy="afterInteractive"
           />
         )}
+        <ClientSignalsBeacon />
         <SentryProvider>
-          <Providers>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
@@ -87,7 +87,6 @@ export default function RootLayout({
                 <Footer />
               </div>
             </ThemeProvider>
-          </Providers>
         </SentryProvider>
       </body>
     </html>

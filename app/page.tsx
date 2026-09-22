@@ -1,22 +1,19 @@
+import { Fragment } from "react"
 import { HeroSection } from "@/components/hero-section"
-import { ProjectsSection } from "@/components/projects-section"
-import { SkillsSection } from "@/components/skills-section"
-import { EducationSection } from "@/components/education-section"
-import { WorkExperienceSection } from "@/components/work-experience-section"
+import { SectionRenderer } from "@/components/section-renderer"
 import { Separator } from "@/components/ui/separator"
+import { visibleSections } from "@/content/data"
 
 export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <Separator className="mx-auto max-w-5xl" />
-      <SkillsSection />
-      <Separator className="mx-auto max-w-5xl" />
-      <ProjectsSection />
-      <Separator className="mx-auto max-w-5xl" />
-      <EducationSection />
-      <Separator className="mx-auto max-w-5xl" />
-      <WorkExperienceSection />
+      {visibleSections.map((section, index) => (
+        <Fragment key={`${section.type}-${index}`}>
+          <Separator className="mx-auto max-w-5xl" />
+          <SectionRenderer section={section} />
+        </Fragment>
+      ))}
     </>
   )
 }

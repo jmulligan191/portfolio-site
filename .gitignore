@@ -4,8 +4,10 @@ __v0_devtools.tsx
 __v0_jsx-dev-runtime.ts
 
 # Sensitive/Personal data
-lib/data.ts
-lib/data_old.ts
+content/data_old.ts
+content/config.ts
+content/*.pdf
+
 
 # Common ignores
 node_modules/
@@ -36,6 +38,15 @@ dev.db
 dev.db-shm
 dev.db-wal
 *.db
+*.db-shm
+*.db-wal
+/data/
+
+# Per-visitor stamped resume copies (site's own audit trail)
+/generated-resumes/
+
+# Generated QR codes (scripts/generate-qr.mts output)
+/qr-codes/
 
 # Resume uploads
 public/resumes/
