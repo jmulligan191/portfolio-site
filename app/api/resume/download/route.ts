@@ -14,7 +14,7 @@ import { resolveCurrentResumeFilename } from "@/lib/resume-sync/sync"
 
 export const runtime = "nodejs"
 
-const DOWNLOAD_FILENAME = "Resume - John Mulligan.pdf"
+const DOWNLOAD_FILENAME = "John Mulligan - Resume.pdf"
 
 function configuredResumeFilename(): string | null {
   const current = resumes.find((r) => r.isCurrent) ?? resumes[0]
